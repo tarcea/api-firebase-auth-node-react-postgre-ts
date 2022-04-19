@@ -6,6 +6,7 @@ app.use(express.json());
 app.use(verifyToken);
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'hello world' });
+  const { token, user_id, email } = res.locals;
+  res.json({ token, user_id, email, message: 'hello world' });
 });
 export default app;
