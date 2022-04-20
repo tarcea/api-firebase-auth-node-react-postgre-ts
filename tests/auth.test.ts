@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Response } from 'express';
 import 'jest';
 import request from 'supertest';
 import app from '../src/app';
@@ -41,16 +42,14 @@ afterAll(async () => {
 });
 
 describe('basic GET at root path /', () => {
+  let response: request.Response;
   test('if a valid idToken from firebase(frontend) is provided respond with a message', async () => {
-    const response = await request(app).get('/').set({
+    response = await request(app).get('/').set({
       Authorization: token,
     });
     expect(response.body.message).toBe('hello world');
   });
   test("if a valid idToken from firebase(frontend) is provided respond with the new created user's email", async () => {
-    const response = await request(app).get('/').set({
-      Authorization: token,
-    });
     expect(response.body.email).toBe('this@is.justatest');
   });
 });

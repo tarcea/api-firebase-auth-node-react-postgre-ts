@@ -1,12 +1,10 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Application } from 'express';
+import router from '../routes';
 import { verifyToken } from './firebase/checkToken';
 
-const app = express();
+const app: Application = express();
 app.use(express.json());
 app.use(verifyToken);
 
-app.get('/', (req: Request, res: Response) => {
-  const { token, user_id, email } = res.locals;
-  res.json({ token, user_id, email, message: 'hello world' });
-});
+app.get('/', router);
 export default app;
