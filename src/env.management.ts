@@ -11,6 +11,6 @@ export const handleErrors = (error: unknown) => {
 };
 
 export const handleDB = () =>
-  process.env.NODE_ENV === 'test'
+  process.env.NODE_ENV === 'ghauth_test'
     ? process.env.DB_TEST_DATABASE
     : process.env.DB_DATABASE;

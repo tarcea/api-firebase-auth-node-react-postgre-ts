@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import { Pool, QueryResult } from 'pg';
+import { handleDB } from '../src/env.management';
 
 export const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
+  database: handleDB(),
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT),
 });
