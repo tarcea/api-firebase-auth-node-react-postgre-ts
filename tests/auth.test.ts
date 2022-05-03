@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Response } from 'express';
+import 'dotenv/config';
 import 'jest';
 import request from 'supertest';
 import app from '../src/app';
@@ -14,7 +14,7 @@ beforeAll(async () => {
     const user = await axios.post(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
       {
-        email: 'this@is.justatest',
+        email: 'this@is.justatest.com',
         password: '123456',
       }
     );
@@ -49,7 +49,7 @@ describe('basic GET at root path /', () => {
     });
     expect(response.body.message).toBe('hello world');
   });
-  test("if a valid idToken from firebase(frontend) is provided respond with the new created user's email", async () => {
-    expect(response.body.email).toBe('this@is.justatest');
+  test("if a valid idToken from firebase(frontend) is provided respond with the new created user's email", () => {
+    expect(response.body.email).toBe('this@is.justatest.com');
   });
 });
