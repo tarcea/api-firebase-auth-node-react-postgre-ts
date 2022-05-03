@@ -7,11 +7,8 @@ export default {
     first_name: Joi.string().max(200),
     last_name: Joi.string().max(200),
     country: Joi.string().max(3),
-    preferred_language: Joi.string().max(20),
     profile_photo: Joi.string().max(500),
-    timezone_id: Joi.number().strict(),
     last_login: Joi.date(),
-    billing_details_id: Joi.number().strict(),
   }),
 
   claimSchema: Joi.object({

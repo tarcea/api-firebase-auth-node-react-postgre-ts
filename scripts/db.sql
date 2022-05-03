@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS users
     first_name         VARCHAR(200),
     last_name          VARCHAR(200),
     country            VARCHAR(3),
-    profile_photo      BYTEA,
+    profile_photo      VARCHAR(200),
     last_login         DATE
 );
