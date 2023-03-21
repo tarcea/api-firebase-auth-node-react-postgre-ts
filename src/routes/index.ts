@@ -5,35 +5,42 @@ import { logger } from '../logger';
 import path from 'path';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
+import { nextTick } from 'process';
 
 const router = Router();
 
 export const use =
-  (
-    fn: (
-      arg0: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-      arg1: Response<any, Record<string, any>>,
-      arg2: NextFunction
-    ) => any
-  ) =>
+  (fn: (req: Request, res: Response, next: NextFunction) => any) =>
   (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+    const route = req.originalUrl;
+    const filename = __filename;
+    Promise.resolve(fn(req, res, next)).catch((err) => {
+      const log = { err, route, filename };
+      next(log);
+    });
   };
 
-const mainRoute = (req: Request, res: Response) => {
+const mainRoute = (req: Request, res: Response, next: NextFunction) => {
   const route = req.originalUrl;
-  logger(route, __filename).info({
-    message: 'this is just an info...',
-  });
-  logger(route, __filename).warn({
-    message: 'this is just a test for debugging log',
-  });
-  const { token, user_id, email, err } = res.locals;
-  return res
-    .status(200)
-    .json({ token, user_id, email, message: 'hello world' });
+  const log = { route, filename: __filename };
+  try {
+    logger(route, __filename).info({
+      message: 'this is just an info...',
+    });
+    logger(route, __filename).warn({
+      message: 'this is just a test for debugging log',
+    });
+
+    const { token, user_id, email } = res.locals;
+
+    return res
+      .status(200)
+      .json({ token, user_id, email, message: 'hello world' });
+  } catch (err) {
+    next({ ...log, err });
+  }
 };
 
-router.get('', use(verifyToken), use(mainRoute));
+router.get('', verifyToken, mainRoute);
 
 export default router;
